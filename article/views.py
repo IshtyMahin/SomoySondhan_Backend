@@ -60,7 +60,7 @@ class ArticleViewSet(viewsets.ModelViewSet):
         serializer = ReviewSerializer(data=review_data)
         if serializer.is_valid():
             serializer.save()
-            send_transaction_email(review_data,"Review Message","Review_email.html")
+            send_transaction_email(review_data,"Review Message","review_email.html")
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
