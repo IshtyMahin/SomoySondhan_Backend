@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Review Email</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #007BFF;
+        }
+
+        h3 {
+            color: #28A745;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        .thank-you {
+            font-weight: bold;
+            margin-top: 20px;
+            color: #FF5733;
+            font-size: 18px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Article Review</h2>
+        
+        <p><strong>Headline:</strong> {{ article.headline }}</p>
+        <p><strong>Body:</strong> {{ article.body|slice:":150" }}....</p>
+
+        <h3>Review Details</h3>
+        <p><strong>Rating:</strong> {{ review.rating }}</p>
+        <p><strong>Comment:</strong> {{ review.comment }}</p>
+
+        <p class="thank-you">Thank you for your review!</p>
+    </div>
+</body>
+</html>
