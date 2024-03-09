@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ["*"]
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+CSRF_TRUSTED_ORIGINS = ['https://somoysondhan-backend.onrender.com','https://*.127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
