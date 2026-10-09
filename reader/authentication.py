@@ -2,7 +2,7 @@
 
 from django.conf import settings
 from django.utils import timezone
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import TokenAuthentication, get_authorization_header
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import AuthenticationFailed
 
@@ -16,6 +16,31 @@ class ExpiringTokenAuthentication(TokenAuthentication):
     """
 
     keyword = "Token"
+
+    def authenticate(self, request):
+        auth = get_authorization_header(request).split()
+
+        if not auth or auth[0].lower() != self.keyword.lower().encode():
+            return None
+
+        if len(auth) != 2:
+            return None
+
+        try:
+            token = auth[1].decode()
+        except UnicodeError:
+            return None
+
+        try:
+            return self.authenticate_credentials(token)
+        except AuthenticationFailed:
+            # On safe read requests (GET, HEAD, OPTIONS), do not reject the whole request
+            # if the reader carries a stale or expired token — let them read public content
+            # as an anonymous visitor. Views requiring authentication (IsAuthenticated)
+            # will still enforce permissions when request.user is AnonymousUser.
+            if request.method in ("GET", "HEAD", "OPTIONS"):
+                return None
+            raise
 
     def authenticate_credentials(self, key):
         try:
