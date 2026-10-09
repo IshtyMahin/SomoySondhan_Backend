@@ -108,7 +108,15 @@ class UserRegistrationAPIView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = serializer.save()
+        try:
+            user = serializer.save()
+        except Exception as exc:
+            err_str = str(exc).lower()
+            if "username" in err_str:
+                raise ValidationError({"username": ["That username is already taken."]})
+            if "email" in err_str:
+                raise ValidationError({"email": ["An account with this email already exists."]})
+            raise ValidationError({"error": "An account with these details already exists."})
         send_confirmation_email(request, user)
         token = issue_token(user)
         return Response(

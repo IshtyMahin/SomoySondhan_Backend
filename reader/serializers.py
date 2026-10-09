@@ -11,7 +11,7 @@ import re
 
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.password_validation import validate_password
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from rest_framework import serializers
 
 from .models import Profile
@@ -127,7 +127,15 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         # Account is active immediately so readers can sign in without waiting for email delivery
         user.is_active = True
-        user.save()
+        try:
+            user.save()
+        except IntegrityError as exc:
+            err_str = str(exc).lower()
+            if "username" in err_str:
+                raise serializers.ValidationError({"username": ["That username is already taken."]})
+            if "email" in err_str:
+                raise serializers.ValidationError({"email": ["An account with this email already exists."]})
+            raise serializers.ValidationError({"error": "An account with these details already exists."})
         return user
 
     @transaction.atomic
