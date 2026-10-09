@@ -1,1 +1,43 @@
-Somoysondhan/.env
+# ── Python ──────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# ── Django ───────────────────────────────────────────────────────────────────
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3.bak*
+db.sqlite3-journal
+staticfiles/
+media/
+
+# ── Environments ────────────────────────────────────────────────────────────
+.env
+.venv
+venv/
+ENV/
+env/
+
+# ── Distribution / packaging ─────────────────────────────────────────────────
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# ── pip / build artefacts ───────────────────────────────────────────────────
+pip-build-env-*/
+pip-build-tracker-*/
+pip-ephem-wheel-cache-*/
+pip-install-*/
+pip-metadata-*/
+pip-modern-metadata-*/
+pip-unpack-*/
+
+# ── Editors / OS ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp

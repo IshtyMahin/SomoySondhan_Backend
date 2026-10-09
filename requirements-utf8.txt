@@ -1,0 +1,21 @@
+# Somoy Sondhan - backend dependencies
+#
+# Verified working set (installed and passing the full test suite on
+# Python 3.13 / Windows). Django is pinned to the 5.1 series because 5.0.x
+# does not support Python 3.13; on Python 3.10-3.12 you can use Django 5.0.x.
+# Install with:  pip install -r requirements-utf8.txt
+#
+# NOTE: this file used to be saved as UTF-16, which made pip fail with
+# "Invalid requirement" on every line. It is now plain UTF-8.
+
+Django>=5.1,<5.2
+djangorestframework>=3.15,<4.0
+django-environ>=0.11,<1.0
+django-cors-headers>=4.3,<5.0
+django-filter>=24.1,<26.0
+drf-spectacular>=0.27,<1.0
+Pillow>=10.0
+
+# Production serving (optional locally)
+gunicorn>=21.2; sys_platform != "win32"
+whitenoise>=6.6
