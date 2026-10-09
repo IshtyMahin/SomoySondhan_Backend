@@ -125,8 +125,8 @@ class UserSerializer(serializers.ModelSerializer):
         password = validated_data.pop("password")
         user = User(**validated_data)
         user.set_password(password)
-        # New readers confirm their address by email before they can sign in.
-        user.is_active = False
+        # Account is active immediately so readers can sign in without waiting for email delivery
+        user.is_active = True
         user.save()
         return user
 
@@ -273,14 +273,14 @@ class LoginSerializer(serializers.Serializer):
             if existing is None:
                 raise serializers.ValidationError({"error": "User not found"})
             if not existing.is_active:
-                raise serializers.ValidationError(
-                    {"error": "Please confirm your email address before signing in."}
-                )
-            raise serializers.ValidationError({"error": "Password is incorrect"})
-        if not user.is_active:
-            raise serializers.ValidationError(
-                {"error": "Please confirm your email address before signing in."}
-            )
+                if existing.check_password(password):
+                    existing.is_active = True
+                    existing.save(update_fields=["is_active"])
+                    user = existing
+                else:
+                    raise serializers.ValidationError({"error": "Password is incorrect"})
+            else:
+                raise serializers.ValidationError({"error": "Password is incorrect"})
         profile = getattr(user, "profile", None)
         if profile is not None and profile.is_blocked:
             raise serializers.ValidationError({"error": "This account has been suspended."})

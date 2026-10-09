@@ -110,15 +110,17 @@ class UserRegistrationAPIView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
         send_confirmation_email(request, user)
-        # 201 with the account, exactly what login.html expects to read.
+        token = issue_token(user)
         return Response(
             {
                 "id": user.id,
+                "user_id": user.id,
+                "token": token.key,
                 "username": user.username,
                 "email": user.email,
                 "first_name": user.first_name,
                 "last_name": user.last_name,
-                "detail": "Account created. Check your email to confirm your address.",
+                "detail": "Account created successfully.",
             },
             status=status.HTTP_201_CREATED,
         )
